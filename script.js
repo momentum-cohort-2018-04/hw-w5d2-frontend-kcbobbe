@@ -1,4 +1,5 @@
 import request from 'superagent'
+const NOTES = []
 
 class Note {
   constructor (title, text) {
@@ -7,9 +8,10 @@ class Note {
     //this.date = date
   }
   writeNote() {
-    inputTitle = document.getElementById('').innerHTML
-    inputText = document.getElementById('').innerHTML
+    var inputTitle = document.getElementById('input-title').value
+    var inputText = document.getElementById('input-text').value
     note = new Note(inputTitle, inputText)
+    return note
   }
   //send innerHTML to API
   postNote() {
@@ -32,7 +34,15 @@ class Note {
       .get("https://notes-api.glitch.me/api/notes")
       .auth('kcbobbe','password123')
       .then (function(result){
-        console.log(result.body.notes)
+        result.body.notes.forEach(function(element){
+          element = `<div>${element.title} ${element.text}</div>`
+          NOTES.push(element)
+          // console.log(element)
+        }
+        )
+        // console.log(NOTES)
+        document.getElementById("notes-list").innerHTML = NOTES.join('')
+        
       })
   }
 //delete note
@@ -41,10 +51,13 @@ class Note {
   }
 }
 //
-var note = new Note ("TITLE","CONTENT")
-note.postNote()
-note.getNote()
-console.log(new Note('yow','wow'))
+// var note = new Note ()
+
+
+
+// note.postNote()
+// note.getNote()
+// console.log(new Note('yow','wow'))
 // request
 //       .post("https://notes-api.glitch.me/api/notes")
 //       .auth('kcbobbe','password123')
@@ -55,5 +68,14 @@ console.log(new Note('yow','wow'))
 //       .then (function a(){
 //         console.log('yes')
 //       })
+document.addEventListener('submit', function (event) {
+  event.preventDefault()
+  console.log('yo')
+  let note = new Note(document.getElementById('input-title').value, document.getElementById('input-text').value)
+  console.log(note)
+  note.postNote()
+  note.getNote()
+})
+
 
 export default Note
