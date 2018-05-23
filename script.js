@@ -116,14 +116,12 @@ document.addEventListener('submit', function (event) {
   console.log(note)
   note.postNote()
   note.getNote()
-  document.addEventListener("DOMContentLoaded", function(event) {
-    console.log("DOM fully loaded and parsed")
-    let note = new Note()
-    note.deleteNote()
-  })
-  
-  
-
+  // document.addEventListener("DOMContentLoaded", function(event) {
+  //   console.log("DOM fully loaded and parsed")
+  //   let note = new Note()
+  //   note.deleteNote()
 })
+
+
 
 export default Note

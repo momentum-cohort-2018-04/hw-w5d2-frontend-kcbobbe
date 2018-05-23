@@ -10,7 +10,9 @@ test('new note title = title', () => {
   expect(testNote.title).toEqual('Title')
 })
 
-test('new note = note', () => {
+test('new note text = text', () => {
   const testNote = new Note('Title','Text')
   expect(testNote.text).toEqual('Text')
 })
+
+
