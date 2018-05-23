@@ -2,19 +2,19 @@ import request from 'superagent'
 let NOTES = []
 
 class Note {
-  constructor(title, text) {
+  constructor (title, text) {
     this.title = title
     this.text = text
     // this.date = date
   }
-  writeNote() {
+  writeNote () {
     var inputTitle = document.getElementById('input-title').value
     var inputText = document.getElementById('input-text').value
     let note = new Note(inputTitle, inputText)
     return note
   }
   // send innerHTML to API
-  postNote() {
+  postNote () {
     // const noteDetails = new Note()
     request
       .post('https://notes-api.glitch.me/api/notes')
@@ -23,13 +23,12 @@ class Note {
         title: this.title,
         text: this.text
       })
-      .then(function a() {
+      .then(function a () {
         console.log('yes')
       })
-
   }
   // get notes from API and put in app
-  getNote() {
+  getNote () {
     let noteList = document.getElementById('notes-list')
     request
       .get('https://notes-api.glitch.me/api/notes')
@@ -63,7 +62,7 @@ class Note {
         })
       })
 
-    //this.deleteNote()
+    // this.deleteNote()
   }
   // delete note
   deleteNote () {
