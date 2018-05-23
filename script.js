@@ -1,5 +1,5 @@
 import request from 'superagent'
-const NOTES = []
+let NOTES = []
 
 class Note {
   constructor (title, text) {
@@ -30,29 +30,70 @@ class Note {
   }
 //get notes from API and put in app
   getNote() {
+    let noteList = document.getElementById("notes-list");
     request
       .get("https://notes-api.glitch.me/api/notes")
       .auth('kcbobbe','password123')
       .then (function(result){
         result.body.notes.forEach(function(element){
-          element = `<div>${element.title} ${element.text}</div>`
+          element = `<div>${element.title} ${element.text}</div>
+          <button type="button" class="delete button-danger" id = "${element._id}">Delete</button>`
           NOTES.push(element)
           // console.log(element)
         }
         )
         // console.log(NOTES)
-        document.getElementById("notes-list").innerHTML = NOTES.join('')
-        
+        //document.getElementById("notes-list").innerHTML = NOTES.join('')
+        noteList.innerHTML = NOTES.join('');
+        noteList.querySelectorAll('.delete').forEach(function(element){
+          element.addEventListener('click', function(event){
+            const noteId = element.id
+            console.log('click: ' + noteId)
+            request
+              .delete(`https://notes-api.glitch.me/api/notes/${noteId}`)
+              .auth('kcbobbe','password123')
+              .then(function(result){
+                let note = new Note()
+                //can't do this.getNote() can't call this from a closure
+                note.getNote()
+                
+                //NOTES = NOTES.filter(note => note._id !== noteId)
+                //document.getElementById("notes-list").innerHTML = NOTES.join('')
+          }
+        )})})
       })
+      
+    //this.deleteNote()
   }
 //delete note
   deleteNote(){
+    document.querySelectorAll('.delete').forEach(function(element){
+      element.addEventListener('click', function(event){
+        const noteId = element.id
+        console.log('click')
+        request
+          .delete(`https://notes-api.glitch.me/api/notes/${noteId}`)
+          .auth('kcbobbe','password123')
+          .then(function(result){
+            // NOTES = NOTES.filter(note => note._id !== noteId)
+            // document.getElementById('notes-list').innerHTML = NOTES.join('')
+            let note = new Note()
+            note.getNote()
+      }
+    )})
+   
 
-  }
+})
+}
 }
 //
 // var note = new Note ()
-
+      // request
+      //     .delete(`https://notes-api.glitch.me/api/notes/yilc1c27ZMRFuzpp`)
+      //     .auth('kcbobbe','password123')
+      //     .then(function(result){
+      //       console.log('deleted')
+      //     })
 
 
 // note.postNote()
@@ -75,7 +116,14 @@ document.addEventListener('submit', function (event) {
   console.log(note)
   note.postNote()
   note.getNote()
-})
+  document.addEventListener("DOMContentLoaded", function(event) {
+    console.log("DOM fully loaded and parsed")
+    let note = new Note()
+    note.deleteNote()
+  })
+  
+  
 
+})
 
 export default Note
